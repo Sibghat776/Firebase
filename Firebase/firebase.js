@@ -1,7 +1,7 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.3.1/firebase-app.js";
 import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.3.1/firebase-analytics.js";
-import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.3.1/firebase-auth.js";
+import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.3.1/firebase-auth.js";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -34,7 +34,7 @@ export function signup(email, password) {
             console.log(user)
             setTimeout(() => {
                 document.body.style.display = "none"
-                window.location.href = "../Home Page/index.html"
+                window.location.href = "../Forkify/forkify.html"
             }, 1000);
         })
         .catch((error) => {
@@ -43,4 +43,59 @@ export function signup(email, password) {
             alert(errorCode)
             alert(errorMessage)
         });
+}
+
+export async function login(email, password) {
+    const auth = getAuth();
+    
+await signInWithEmailAndPassword(auth, email, password)
+  .then((userCredential) => {
+    // Signed in 
+    const user = userCredential.user;
+    // ...
+    console.log(user)
+    console.log(userCredential)
+    alert("Login Successfully, Moving you to home page")
+    setTimeout(() => {
+      window.location.href = "../Forkify/forkify.html"
+    }, 500);
+  })
+  .catch((error) => {
+    const errorCode = error.code;
+    const errorMessage = error.message;
+    alert(errorCode)
+    alert(errorMessage)
+  });
+
+}
+
+
+
+export async function loginStateObserver() {
+  return new Promise((res, rej) => {
+    const auth = getAuth();
+onAuthStateChanged(auth, (user) => {
+  if (user) {
+    const uid = user.uid;
+    console.log("Ye banda Logged In ha", user)
+    res(uid)
+  } else {
+    alert("No user Logged In, Sorry Kicking you out")
+    rej("No user Found")
+    setTimeout(() => {
+      window.location.href = "../index.html"
+    }, 1000);
+  }
+});
+  })
+}
+
+export async function logout() {
+  try {
+    await signOut(auth);
+    console.log("==>> signout successfully");
+    setTimeout(() => {
+      window.location.href = "../index.html";
+    }, 3000);
+  } catch (error) { }
 }

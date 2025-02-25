@@ -8,13 +8,13 @@ import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, si
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
-    apiKey: "AIzaSyDFPzEYHWTxmYRxT0Uis8LUgMPYK1K6Hwc",
-    authDomain: "first-project-f7f45.firebaseapp.com",
-    projectId: "first-project-f7f45",
-    storageBucket: "first-project-f7f45.firebasestorage.app",
-    messagingSenderId: "716649101203",
-    appId: "1:716649101203:web:404323e3465af2ed93da66",
-    measurementId: "G-5M84PEXTTN"
+  apiKey: "AIzaSyDFPzEYHWTxmYRxT0Uis8LUgMPYK1K6Hwc",
+  authDomain: "first-project-f7f45.firebaseapp.com",
+  projectId: "first-project-f7f45",
+  storageBucket: "first-project-f7f45.firebasestorage.app",
+  messagingSenderId: "716649101203",
+  appId: "1:716649101203:web:404323e3465af2ed93da66",
+  measurementId: "G-5M84PEXTTN"
 };
 
 // Initialize Firebase
@@ -24,48 +24,49 @@ const auth = getAuth(app)
 
 
 // SIGNUP
-export function signup(email, password) {
-    createUserWithEmailAndPassword(auth, email, password, userName)
-        .then((userCredential) => {
-            // Signed up 
-            const user = userCredential;
-            // ...
-            alert("You Signed In Successfully, Moving You to Home Page")
-            console.log(user)
-            setTimeout(() => {
-                document.body.style.display = "none"
-                window.location.href = "../Forkify/forkify.html"
-            }, 1000);
-        })
-        .catch((error) => {
-            const errorCode = error.code;
-            const errorMessage = error.message;
-            alert(errorCode)
-            alert(errorMessage)
-        });
+export function signup(...userDetails) {
+return console.log(userDetails)
+  createUserWithEmailAndPassword(auth, email, password, userName)
+    .then((userCredential) => {
+      // Signed up 
+      const user = userCredential;
+      // ...
+      alert("You Signed In Successfully, Moving You to Home Page")
+      console.log(user)
+      setTimeout(() => {
+        document.body.style.display = "none"
+        window.location.href = "../Forkify/forkify.html"
+      }, 1000);
+    })
+    .catch((error) => {
+      const errorCode = error.code;
+      const errorMessage = error.message;
+      alert(errorCode)
+      alert(errorMessage)
+    });
 }
 
 export async function login(email, password) {
-    const auth = getAuth();
-    
-await signInWithEmailAndPassword(auth, email, password)
-  .then((userCredential) => {
-    // Signed in 
-    const user = userCredential.user;
-    // ...
-    console.log(user)
-    console.log(userCredential)
-    alert("Login Successfully, Moving you to home page")
-    setTimeout(() => {
-      window.location.href = "../Forkify/forkify.html"
-    }, 500);
-  })
-  .catch((error) => {
-    const errorCode = error.code;
-    const errorMessage = error.message;
-    alert(errorCode)
-    alert(errorMessage)
-  });
+  const auth = getAuth();
+
+  await signInWithEmailAndPassword(auth, email, password)
+    .then((userCredential) => {
+      // Signed in 
+      const user = userCredential.user;
+      // ...
+      console.log(user)
+      console.log(userCredential)
+      alert("Login Successfully, Moving you to home page")
+      setTimeout(() => {
+        window.location.href = "../Forkify/forkify.html"
+      }, 500);
+    })
+    .catch((error) => {
+      const errorCode = error.code;
+      const errorMessage = error.message;
+      alert(errorCode)
+      alert(errorMessage)
+    });
 
 }
 
@@ -74,19 +75,19 @@ await signInWithEmailAndPassword(auth, email, password)
 export async function loginStateObserver() {
   return new Promise((res, rej) => {
     const auth = getAuth();
-onAuthStateChanged(auth, (user) => {
-  if (user) {
-    const uid = user.uid;
-    console.log("Ye banda Logged In ha", user)
-    res(uid)
-  } else {
-    alert("No user Logged In, Sorry Kicking you out")
-    rej("No user Found")
-    setTimeout(() => {
-      window.location.href = "../index.html"
-    }, 1000);
-  }
-});
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        const uid = user.uid;
+        console.log("Ye banda Logged In ha", user)
+        res(uid)
+      } else {
+        alert("No user Logged In, Sorry Kicking you out")
+        rej("No user Found")
+        setTimeout(() => {
+          window.location.href = "../index.html"
+        }, 1000);
+      }
+    });
   })
 }
 

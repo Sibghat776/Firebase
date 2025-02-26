@@ -1,6 +1,7 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.3.1/firebase-app.js";
 import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.3.1/firebase-analytics.js";
+import { doc, setDoc, getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/11.3.1/firebase-firestore.js";
 import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.3.1/firebase-auth.js";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
@@ -21,20 +22,21 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
 const auth = getAuth(app)
+const db = getFirestore(app);
 
 
 // SIGNUP
-export function signup(...userDetails) {
-return console.log(userDetails)
+export async function signup(...userDetails) {
+  let [email, password, userName] = userDetails
   createUserWithEmailAndPassword(auth, email, password, userName)
     .then((userCredential) => {
       // Signed up 
       const user = userCredential;
+      
       // ...
       alert("You Signed In Successfully, Moving You to Home Page")
       console.log(user)
       setTimeout(() => {
-        document.body.style.display = "none"
         window.location.href = "../Forkify/forkify.html"
       }, 1000);
     })
@@ -44,6 +46,15 @@ return console.log(userDetails)
       alert(errorCode)
       alert(errorMessage)
     });
+    await setDoc(doc(db, "users", userCredential?.user?.uid), {
+      userDetails,
+    });
+
+    console.log("===>> hurraayyyy user ka data store hogaya");
+    alert("We are going to move you towards home page");
+    setTimeout(() => {
+      window.location.href = "../home/home.html";
+    }, 60000);
 }
 
 export async function login(email, password) {

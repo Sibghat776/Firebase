@@ -25,36 +25,30 @@ const auth = getAuth(app)
 const db = getFirestore(app);
 
 
-// SIGNUP
-export async function signup(...userDetails) {
-  let [email, password, userName] = userDetails
-  createUserWithEmailAndPassword(auth, email, password, userName)
-    .then((userCredential) => {
-      // Signed up 
-      const user = userCredential;
-      
-      // ...
-      alert("You Signed In Successfully, Moving You to Home Page")
-      console.log(user)
-      setTimeout(() => {
-        window.location.href = "../Forkify/forkify.html"
-      }, 1000);
-    })
-    .catch((error) => {
-      const errorCode = error.code;
-      const errorMessage = error.message;
-      alert(errorCode)
-      alert(errorMessage)
-    });
-    await setDoc(doc(db, "users", userCredential?.user?.uid), {
-      userDetails,
-    });
 
+// SIGNUP
+export async function signup(userDetails) {
+  let { password, email, userName } = userDetails
+  try {
+    let userCredential = await createUserWithEmailAndPassword(auth, email, userName)
+    console.log(userCredential.user.uid, "User registered")
+    // ...
+    alert("You registered Successfully, Moving You to Home Page")
+    let { password: myPassword, ...userDetailsWithoutPassword } = userDetails
+    await setDoc(doc(db, "Users", userCredential?.user?.uid), {
+      userDetailsWithoutPassword,
+    });
     console.log("===>> hurraayyyy user ka data store hogaya");
     alert("We are going to move you towards home page");
     setTimeout(() => {
-      window.location.href = "../home/home.html";
-    }, 60000);
+      window.location.href = "../Forkify/forkify.html"
+    }, 10000);
+  } catch (error) {
+    const errorCode = error.code;
+    const errorMessage = error.message;
+    alert(errorCode)
+    alert(errorMessage)
+  }
 }
 
 export async function login(email, password) {

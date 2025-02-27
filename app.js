@@ -4,4 +4,4 @@ let email = document.querySelector("#email")
 let password = document.querySelector("#password")
 let userName = document.querySelector("#userName")
 
-signupBtn.addEventListener("click", () => signup(email.value, password.value, userName.value))
+signupBtn.addEventListener("click", () => signup({ email: email.value, password: password.value, userName: userName.value }))

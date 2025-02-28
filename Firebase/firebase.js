@@ -108,6 +108,7 @@ export async function logout() {
 
 export async function getUser(userId) {
   try {
+    console.log(userId)
     const userRef = doc(db, "Users", userId);
     const userSnap = await getDoc(userRef);
     if (userSnap.exists()) {

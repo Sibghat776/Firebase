@@ -1,26 +1,22 @@
-import{loginStateObserver, logout} from "../Firebase/firebase.js"
+import { loginStateObserver, logout } from "../Firebase/firebase.js"
 
 
 let userDish = document.querySelector("#userDish")
 let searchDishBtn = document.querySelector("#searchDishBtn")
 let logoutBtn = document.querySelector("#logoutBtn")
 let customDishes = document.querySelector("#customDishes")
-let loggedInUserId;
 
 
-searchDishBtn.addEventListener("click" , async function allRecipes(event) {
+async function allRecipes(event) {
     event.preventDefault()
     console.log("chala")
     let allRecipes = await fetch(`https://forkify-api.herokuapp.com/api/v2/recipes?search=${userDish.value}`)
     let allRecipesJSON = await allRecipes.json()
     console.log(allRecipesJSON)
-})
-
-export async function loggedInUserData() {
-    let uid = await loginStateObserver()
-    console.log(uid)
-    loggedInUserId = uid
 }
+
+searchDishBtn.addEventListener("click", allRecipes)
+
 
 
 logoutBtn.addEventListener("click", logout)

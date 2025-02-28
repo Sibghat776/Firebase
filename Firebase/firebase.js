@@ -1,7 +1,7 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.3.1/firebase-app.js";
 import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.3.1/firebase-analytics.js";
-import { doc, setDoc, getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/11.3.1/firebase-firestore.js";
+import { doc, setDoc, getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/11.3.1/firebase-firestore.js";
 import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.3.1/firebase-auth.js";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
@@ -30,7 +30,7 @@ const db = getFirestore(app);
 export async function signup(userDetails) {
   let { password, email, userName } = userDetails
   try {
-    let userCredential = await createUserWithEmailAndPassword(auth, email, userName)
+    let userCredential = await createUserWithEmailAndPassword(auth, email, password)
     console.log(userCredential.user.uid, "User registered")
     // ...
     alert("You registered Successfully, Moving You to Home Page")
@@ -52,27 +52,24 @@ export async function signup(userDetails) {
 }
 
 export async function login(email, password) {
-  const auth = getAuth();
-
-  await signInWithEmailAndPassword(auth, email, password)
-    .then((userCredential) => {
-      // Signed in 
-      const user = userCredential.user;
-      // ...
-      console.log(user)
-      console.log(userCredential)
-      alert("Login Successfully, Moving you to home page")
-      setTimeout(() => {
-        window.location.href = "../Forkify/forkify.html"
-      }, 500);
-    })
-    .catch((error) => {
-      const errorCode = error.code;
-      const errorMessage = error.message;
-      alert(errorCode)
-      alert(errorMessage)
-    });
-
+  try {
+    console.log(email, password)
+    let userCredential = await signInWithEmailAndPassword(auth, email, password)
+    // Signed in 
+    const user = userCredential.user;
+    // ...
+    console.log(user)
+    console.log(userCredential)
+    alert("Login Successfully, Moving you to home page")
+    // setTimeout(() => {
+    //   window.location.href = "../Forkify/forkify.html"
+    // }, 500);
+  } catch (error) {
+    const errorCode = error.code;
+    const errorMessage = error.message;
+    alert(errorCode)
+    alert(errorMessage)
+  }
 }
 
 
@@ -104,4 +101,14 @@ export async function logout() {
       window.location.href = "../index.html";
     }, 3000);
   } catch (error) { }
+}
+
+
+
+export async function user() {
+  const querySnapshot = await getDocs(collection(db, "Users"));
+  querySnapshot.forEach((doc) => {
+    console.log(doc, "Doc")
+    console.log(`${doc.id} => ${doc.data()}`);
+  });
 }

@@ -5,6 +5,7 @@ let userDish = document.querySelector("#userDish")
 let searchDishBtn = document.querySelector("#searchDishBtn")
 let logoutBtn = document.querySelector("#logoutBtn")
 let customDishes = document.querySelector("#customDishes")
+let loggedInUserId;
 
 
 searchDishBtn.addEventListener("click" , async function allRecipes(event) {
@@ -15,10 +16,12 @@ searchDishBtn.addEventListener("click" , async function allRecipes(event) {
     console.log(allRecipesJSON)
 })
 
-async function loginCheck() {
-    await loginStateObserver()
+export async function loggedInUserData() {
+    let uid = await loginStateObserver()
+    console.log(uid)
+    loggedInUserId = uid
 }
-loginCheck()
+
 
 logoutBtn.addEventListener("click", logout)
 

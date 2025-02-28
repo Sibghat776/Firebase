@@ -1,7 +1,7 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.3.1/firebase-app.js";
 import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.3.1/firebase-analytics.js";
-import { doc, setDoc, getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/11.3.1/firebase-firestore.js";
+import { doc, setDoc, getFirestore, collection, getDoc } from "https://www.gstatic.com/firebasejs/11.3.1/firebase-firestore.js";
 import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.3.1/firebase-auth.js";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
@@ -81,7 +81,7 @@ export async function loginStateObserver() {
       if (user) {
         const uid = user.uid;
         console.log("Ye banda Logged In ha", user)
-        res(uid)
+        res(uid)  
       } else {
         alert("No user Logged In, Sorry Kicking you out")
         rej("No user Found")
@@ -106,10 +106,18 @@ export async function logout() {
 }
 
 
-
-export async function user() {
-  const querySnapshot = await getDocs(collection(db, "Users"));
-  querySnapshot.forEach((doc) => {
-    console.log(`${doc.id} => ${doc.data()}`);
-  });
+export async function getUser(userId) {
+  try {
+    const userRef = doc(db, "Users", userId);
+    const userSnap = await getDoc(userRef);
+    if (userSnap.exists()) {
+      console.log("User Data:", userSnap.data());
+      return userSnap.data();
+    } else {
+      console.log("No such user!");
+      return null;
+    }
+  } catch (error) {
+    console.error("Error fetching user:", error);
+  }
 }

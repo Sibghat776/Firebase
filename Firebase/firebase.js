@@ -61,9 +61,9 @@ export async function login(email, password) {
     console.log(user)
     console.log(userCredential)
     alert("Login Successfully, Moving you to home page")
-    // setTimeout(() => {
-    //   window.location.href = "../Forkify/forkify.html"
-    // }, 500);
+    setTimeout(() => {
+      window.location.href = "../Forkify/forkify.html"
+    }, 1000);
   } catch (error) {
     const errorCode = error.code;
     const errorMessage = error.message;
@@ -93,6 +93,8 @@ export async function loginStateObserver() {
   })
 }
 
+
+
 export async function logout() {
   try {
     await signOut(auth);
@@ -108,7 +110,6 @@ export async function logout() {
 export async function user() {
   const querySnapshot = await getDocs(collection(db, "Users"));
   querySnapshot.forEach((doc) => {
-    console.log(doc, "Doc")
     console.log(`${doc.id} => ${doc.data()}`);
   });
 }
